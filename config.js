@@ -1,18 +1,24 @@
 // # Ghost Configuration
 // Setup your Ghost install for various [environments](http://support.ghost.org/config/#about-environments).
-
 // Ghost runs in `development` mode by default. Full documentation can be found at http://support.ghost.org/config/
-
 var path = require('path'),
     config;
-
 config = {
     // ### Production
     // When running Ghost in the wild, use the production environment.
     // Configure your URL and mail settings here
     production: {
-        url: 'http://my-ghost-blog.com',
-        mail: {},
+        url: 'http://panjigautama.com',
+        mail: {
+            transport: 'SMTP',
+            options: {
+                service: 'Mailgun',
+                auth: {
+                    user: 'postmaster@sandbox198bc053161548ee805d8ae596aac7ea.mailgun.org',
+                    pass: '85z0lzfd30m0'
+                }
+            }
+        },
         database: {
             client: 'sqlite3',
             connection: {
@@ -20,24 +26,20 @@ config = {
             },
             debug: false
         },
-
         server: {
             host: '127.0.0.1',
-            port: '2368'
+            port: '8083'
         }
     },
-
     // ### Development **(default)**
     development: {
         // The url to use when providing links to the site, E.g. in RSS and email.
         // Change this to your Ghost blog's published URL.
-        url: 'http://localhost:2368',
-
+        url: 'http://localhost:8083',
         // Example refferer policy
         // Visit https://www.w3.org/TR/referrer-policy/ for instructions
         // default 'origin-when-cross-origin',
         // referrerPolicy: 'origin-when-cross-origin',
-
         // Example mail config
         // Visit http://support.ghost.org/mail for instructions
         // ```
@@ -52,7 +54,6 @@ config = {
         //      }
         //  },
         // ```
-
         // #### Database
         // Ghost supports sqlite3 (default), MySQL & PostgreSQL
         database: {
@@ -76,9 +77,7 @@ config = {
             contentPath: path.join(__dirname, '/content/')
         }
     },
-
     // **Developers only need to edit below here**
-
     // ### Testing
     // Used when developing Ghost to run tests and check the health of Ghost
     // Uses a different port number
@@ -90,11 +89,8 @@ config = {
                 filename: path.join(__dirname, '/content/data/ghost-test.db')
             },
             pool: {
-                afterCreate: function (conn, done) {
-                    conn.run('PRAGMA synchronous=OFF;' +
-                    'PRAGMA journal_mode=MEMORY;' +
-                    'PRAGMA locking_mode=EXCLUSIVE;' +
-                    'BEGIN EXCLUSIVE; COMMIT;', done);
+                afterCreate: function(conn, done) {
+                    conn.run('PRAGMA synchronous=OFF;' + 'PRAGMA journal_mode=MEMORY;' + 'PRAGMA locking_mode=EXCLUSIVE;' + 'BEGIN EXCLUSIVE; COMMIT;', done);
                 }
             },
             useNullAsDefault: true
@@ -105,7 +101,6 @@ config = {
         },
         logging: false
     },
-
     // ### Testing MySQL
     // Used by Travis - Automated testing run through GitHub
     'testing-mysql': {
@@ -113,11 +108,11 @@ config = {
         database: {
             client: 'mysql',
             connection: {
-                host     : '127.0.0.1',
-                user     : 'root',
-                password : '',
-                database : 'ghost_testing',
-                charset  : 'utf8'
+                host: '127.0.0.1',
+                user: 'root',
+                password: '',
+                database: 'ghost_testing',
+                charset: 'utf8'
             }
         },
         server: {
@@ -126,7 +121,6 @@ config = {
         },
         logging: false
     },
-
     // ### Testing pg
     // Used by Travis - Automated testing run through GitHub
     'testing-pg': {
@@ -134,11 +128,11 @@ config = {
         database: {
             client: 'pg',
             connection: {
-                host     : '127.0.0.1',
-                user     : 'postgres',
-                password : '',
-                database : 'ghost_testing',
-                charset  : 'utf8'
+                host: '127.0.0.1',
+                user: 'postgres',
+                password: '',
+                database: 'ghost_testing',
+                charset: 'utf8'
             }
         },
         server: {
@@ -148,5 +142,4 @@ config = {
         logging: false
     }
 };
-
 module.exports = config;
